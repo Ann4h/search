@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Filter Web Mapping Application</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+        .search-box {
+            text-align: center;
+            padding: 10px;
+        }
+        .map-container {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Kenyan Universities</h1>
+    </header>
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search locations...">
+    </div>
+
+    <div id="map" class="map-container"></div>
+<div class="footer">
+    <p>&copy; ENC221-0102/2018</p>
+  </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // This is your test.js file
+
+        // Initialize the map
+        var map = L.map('map').setView([0.0236, 37.9062], 6);
+
+        // Add the base tile layer (you can use other tile layers as well)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Sample data of universities in Kenya (you should replace this with your actual data)
+        var universitiesData = [
+            {
+                name: 'University of Nairobi',
+                lat: -1.2792,
+                lng: 36.8191,
+            },
+            {
+                name: 'Kenyatta University',
+                lat: -1.1489,
+                lng: 36.9684,
+            },
+			 {
+                name: 'Jomo Kenyatta University of Agriculture and Technology',
+                lat: -1.2457458387419562, 
+                lng: 36.74277457256475,
+            },
+			 {
+                name: 'Pwani University',
+                lat: -3.6205196256553793, 
+                lng: 39.84668719348371,
+            },
+			 {
+                name: 'Technical University of Kenya',
+                lat: -1.1792535221312184,
+                lng:  36.85270612617933,
+            },
+			 {
+                name: 'Technical University of Mombasa',
+                lat: -4.042162560889955, 
+                lng: 39.66844537282203,
+            },
+			 {
+                name: 'Maseno University',
+                lat: 0.08269095641099374, 
+                lng: 34.76526961156401,
+            },
+			 {
+                name: 'Masinde Muliro University',
+                lat: 0.8201286370373272, 
+                lng: 34.77538047734579,
+            },
+			 {
+                name: 'Mount Kenya University',
+                lat: -1.1062334504767275,
+                lng:  37.05281584629578,
+            },
+			 {
+                name: 'Dedan Kimathi University',
+                lat: -1.2503596276088234, 
+                lng: 36.81110311789043,
+            },
+            {
+                name: 'Kisii University',
+                lat: -1.2558126777367666,
+                lng:  36.81932936338511,
+            },
+			 {
+                name: 'Strathmore University',
+                lat:-1.3091384358228801, 
+                lng: 36.81252431748725,
+            },
+			 {
+                name: 'Kabarak University',
+                lat:-0.05085720222233967, 
+                lng: 35.91935106874793,
+            },
+			 {
+                name: 'Daystar University',
+                lat: -1.2688662717573849, 
+                lng: 36.81285181484403,
+            },
+			 {
+                name: 'Laikipia University',
+                lat: -0.24684683450917325, 
+                lng: 36.16930356345861,
+            },
+			 {
+                name: 'Kenya Methodist University',
+                lat:-1.2183072225864995, 
+                lng: 36.817279814241004,
+            },
+			 {
+                name: 'Meru University',
+                lat: 0.10566808995828825, 
+                lng: 37.63731482562251,
+            },
+        ];
+
+        // Create markers and add them to the map
+        var markers = [];
+        universitiesData.forEach(function (university) {
+            var marker = L.marker([university.lat, university.lng]).addTo(map);
+            marker.bindPopup(university.name);
+            markers.push(marker);
+        });
+
+        // Search functionality
+        var searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', function () {
+            var searchText = searchInput.value.toLowerCase();
+            var foundMarkers = [];
+            markers.forEach(function (marker) {
+                var markerName = marker.getPopup().getContent().toLowerCase();
+                if (markerName.includes(searchText)) {
+                    marker.addTo(map);
+                    foundMarkers.push(marker);
+                } else {
+                    marker.removeFrom(map);
+                }
+            });
+
+            // Zoom to the first found marker, if any
+            if (foundMarkers.length > 0) {
+                var foundMarker = foundMarkers[0];
+                map.setView(foundMarker.getLatLng(), 15);
+            }
+        });
+    </script>
+</body>
+</html>
